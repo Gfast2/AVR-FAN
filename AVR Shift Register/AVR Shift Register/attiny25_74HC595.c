@@ -71,7 +71,7 @@ uint8_t LED_patterns[20] =
 void initialise_ADC(void)
 {
 	ADCSRA |= 1<<ADEN | 1<<ADIE | 1<<ADPS0 | 1<<ADPS2;
-	ADMUX  |= 1<<MUX1 | 1<<MUX0;						// PB3 as ADC pin
+	ADMUX  |= 1<<MUX1 /* | 1<<MUX0 */;						// PB3 as ADC pin
 }
 
 void start_conversion(void)
