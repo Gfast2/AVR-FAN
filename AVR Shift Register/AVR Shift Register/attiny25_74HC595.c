@@ -41,16 +41,16 @@ int main(void)
 	start_conversion();
 	
 	DDRB |= (1<<PB0) | (1<<PB1);						// PWM control pin, as output
-	TCCR0A |= (1<<COM0A1) | (1<<COM0B1) | (1<<WGM00) | (1<<WGM01);	// fast PWM mode + clear OC0A & CO0B on compare match
+	//TCCR0A |= (1<<COM0A1) | (1<<COM0B1) | (1<<WGM00) | (1<<WGM01);	// fast PWM mode + clear OC0A & CO0B on compare match
 	
 	TIMSK |= (1<<TOIE0);								// Here some differences.
 	
 	OCR0A = 125;										// should later be comment out to let interrupt handle this problem.
 	OCR0B = 125;
 	
-	TCCR0B |= (1<<CS00);								// no prescaler
+	//TCCR0B |= (1<<CS00);								// no prescaler
 	
-	// TCCR1 |= (1<<COM1A0);								// Toggle OC1A line.	
+	 TCCR1 |= (1<<COM1A0);								// Toggle OC1A line.	Page.86
 	while(1)
 	{
 	}
@@ -64,16 +64,17 @@ ISR(ADC_vect)
 	ADCSRA |= 1<<ADSC;
 }
 
-
+/* //works parts with timer/counter 0
 ISR(TIMER0_OVF_vect)
 {
 	OCR0A = dutyCycle;
 	OCR0B = dutyCycle;
 }
+*/
 
-/*
+
 ISR(TIMER1_OVF_vect)
 {
 	OCR1A = dutyCycle;
 }
-*/
+
