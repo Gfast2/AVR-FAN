@@ -40,17 +40,21 @@ int main(void)
 	initialise_ADC();
 	start_conversion();
 	
-	DDRB |= (1<<PB0) | (1<<PB1);						// PWM control pin, as output
+	DDRB |= (1 << PB0) | (1 << PB1);						// PWM control pin, as output
 	//TCCR0A |= (1<<COM0A1) | (1<<COM0B1) | (1<<WGM00) | (1<<WGM01);	// fast PWM mode + clear OC0A & CO0B on compare match
 	
-	TIMSK |= (1<<TOIE0);								// Here some differences.
+	//TIMSK |= (1<<TOIE0);								// Timer/Counter0 Overflow Interrupt Enable
 	
-	OCR0A = 125;										// should later be comment out to let interrupt handle this problem.
-	OCR0B = 125;
+	//OCR0A = 125;										// should later be comment out to let interrupt handle this problem.
+	//OCR0B = 125;
 	
 	//TCCR0B |= (1<<CS00);								// no prescaler
 	
-	 TCCR1 |= (1<<COM1A0);								// Toggle OC1A line.	Page.86
+	OCR1C = 159;
+	TCCR1 |= (1 << PWM1B) | (1 << PWM1A) | (1 << COM1A1) | (1 << CS11); // PWM mode + clear OC1A output line + CK/2
+	
+	TIMSK |= (1 << TOIE1); //P.92 Timer/Counter Overflow Interrupt Enable
+	
 	while(1)
 	{
 	}
