@@ -87,7 +87,7 @@ Disassembly of section .text:
 
 00000052 <initialise_ADC>:
 volatile uint16_t voltage_reading;
-volatile uint8_t  dutyCycle = 127; //percent value of PWM dutyCycle.
+volatile uint8_t  dutyCycle = 127; 
 
 void initialise_ADC(void)
 {
@@ -95,7 +95,7 @@ void initialise_ADC(void)
   52:	86 b1       	in	r24, 0x06	; 6
   54:	8d 68       	ori	r24, 0x8D	; 141
   56:	86 b9       	out	0x06, r24	; 6
-	ADMUX  |= 1<<MUX1;						// PB3 as ADC pin
+	ADMUX  |= 1<<MUX1;	// PB3 as ADC pin
   58:	39 9a       	sbi	0x07, 1	; 7
   5a:	08 95       	ret
 
@@ -131,23 +131,22 @@ int main(void)
 	//OCR0B = 125;
 	//TCCR0B |= (1<<CS00);								// no prescaler
 	
-	OCR1C = 127; // setting the PWM speed. In this case, it is working @100KHz
+	OCR1C = 127;											// setting the PWM speed. In this case, it is working @500KHz
   6c:	8f e7       	ldi	r24, 0x7F	; 127
   6e:	8d bd       	out	0x2d, r24	; 45
-	TCCR1 |= (1 << PWM1A) | (1 << COM1A0) /*| (1 << CS11)*/ | (1 << CS10); // PWM mode + clear OC1A output line + CK/2. COM1A0!! Page:87
+	TCCR1 |= (1 << PWM1A) | (1 << COM1A0) | (1 << CS10);	// PWM mode + clear OC1A output line + CK/2. COM1A0 decide if PB0 get inverted signal!! Page:87
   70:	80 b7       	in	r24, 0x30	; 48
   72:	81 65       	ori	r24, 0x51	; 81
   74:	80 bf       	out	0x30, r24	; 48
-	
-	TIMSK |= (1 << TOIE1); //P.92 Timer/Counter Overflow Interrupt Enable
+	TIMSK |= (1 << TOIE1);									//P.92 Timer/Counter Overflow Interrupt Enable
   76:	89 b7       	in	r24, 0x39	; 57
   78:	84 60       	ori	r24, 0x04	; 4
   7a:	89 bf       	out	0x39, r24	; 57
   7c:	ff cf       	rjmp	.-2      	; 0x7c <main+0x1c>
 
 0000007e <__vector_8>:
-	{
-	}
+	
+	while(1){}
 }
 
 ISR(ADC_vect)
@@ -164,8 +163,7 @@ ISR(ADC_vect)
   8e:	95 b1       	in	r25, 0x05	; 5
   90:	90 93 63 00 	sts	0x0063, r25
   94:	80 93 62 00 	sts	0x0062, r24
-	
-	dutyCycle = voltage_reading / 8; // voltage_reading: 0 ~ 1023, dutyCycle: 0 ~ 255
+	dutyCycle = voltage_reading / 8; // voltage_reading: 0 ~ 1023, dutyCycle: 0 ~ 127
   98:	80 91 62 00 	lds	r24, 0x0062
   9c:	90 91 63 00 	lds	r25, 0x0063
   a0:	96 95       	lsr	r25
@@ -187,9 +185,9 @@ ISR(ADC_vect)
   be:	18 95       	reti
 
 000000c0 <__vector_4>:
+	OCR0B = dutyCycle;
 }
 */
-
 
 ISR(TIMER1_OVF_vect)
 {
