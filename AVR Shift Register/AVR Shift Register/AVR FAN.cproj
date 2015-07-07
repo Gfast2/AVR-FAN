@@ -13,7 +13,7 @@
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <AssemblyName>AVR Shift Register</AssemblyName>
-    <Name>AVR Lampe</Name>
+    <Name>AVR FAN</Name>
     <RootNamespace>AVR Shift Register</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>

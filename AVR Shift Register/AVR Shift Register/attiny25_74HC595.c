@@ -2,12 +2,14 @@
  * AVR_Shift_Register.c
  * Inspired by : https://www.youtube.com/watch?v=d7Au3I4ZdZc
  *
- * Created		: 2015-5-23 6:49:39
- * last Edite	: 2015-5-23
+ * Created		: 2015-7-7
+ * last Edite	: 2015-7-7
  *  Author		: Su Gao
  */ 
 
-#define F_CPU 1000000UL // In first try it shows about 4 sec. per digit under 8000000UL. And I think the 8 divider (CKDI8) in fuse works.
+// In first try it shows about 4 sec. per digit under 8000000UL. And I think the 8 divider (CKDI8) in fuse works.
+// This time I deactivate this divider fuse in order to speed up PWM (original with divided prescaler PWM working at 500K)
+#define F_CPU 8000000UL 
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
