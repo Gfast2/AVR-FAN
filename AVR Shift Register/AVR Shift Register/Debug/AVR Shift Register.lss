@@ -1,0 +1,649 @@
+
+AVR Shift Register.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000390  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000016  00800060  00000390  00000424  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000004  00800076  00800076  0000043a  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000043a  2**0
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  0000046a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000207  00000000  00000000  000004c2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000012b  00000000  00000000  000006c9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000188  00000000  00000000  000007f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000f8  00000000  00000000  0000097c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000001f9  00000000  00000000  00000a74  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000195  00000000  00000000  00000c6d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000048  00000000  00000000  00000e02  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0e c0       	rjmp	.+28     	; 0x1e <__ctors_end>
+   2:	26 c0       	rjmp	.+76     	; 0x50 <__bad_interrupt>
+   4:	25 c0       	rjmp	.+74     	; 0x50 <__bad_interrupt>
+   6:	24 c0       	rjmp	.+72     	; 0x50 <__bad_interrupt>
+   8:	23 c0       	rjmp	.+70     	; 0x50 <__bad_interrupt>
+   a:	4c c1       	rjmp	.+664    	; 0x2a4 <__vector_5>
+   c:	21 c0       	rjmp	.+66     	; 0x50 <__bad_interrupt>
+   e:	20 c0       	rjmp	.+64     	; 0x50 <__bad_interrupt>
+  10:	6d c0       	rjmp	.+218    	; 0xec <__vector_8>
+  12:	1e c0       	rjmp	.+60     	; 0x50 <__bad_interrupt>
+  14:	1d c0       	rjmp	.+58     	; 0x50 <__bad_interrupt>
+  16:	1c c0       	rjmp	.+56     	; 0x50 <__bad_interrupt>
+  18:	1b c0       	rjmp	.+54     	; 0x50 <__bad_interrupt>
+  1a:	1a c0       	rjmp	.+52     	; 0x50 <__bad_interrupt>
+  1c:	19 c0       	rjmp	.+50     	; 0x50 <__bad_interrupt>
+
+0000001e <__ctors_end>:
+  1e:	11 24       	eor	r1, r1
+  20:	1f be       	out	0x3f, r1	; 63
+  22:	cf ed       	ldi	r28, 0xDF	; 223
+  24:	cd bf       	out	0x3d, r28	; 61
+
+00000026 <__do_copy_data>:
+  26:	10 e0       	ldi	r17, 0x00	; 0
+  28:	a0 e6       	ldi	r26, 0x60	; 96
+  2a:	b0 e0       	ldi	r27, 0x00	; 0
+  2c:	e0 e9       	ldi	r30, 0x90	; 144
+  2e:	f3 e0       	ldi	r31, 0x03	; 3
+  30:	02 c0       	rjmp	.+4      	; 0x36 <__do_copy_data+0x10>
+  32:	05 90       	lpm	r0, Z+
+  34:	0d 92       	st	X+, r0
+  36:	a6 37       	cpi	r26, 0x76	; 118
+  38:	b1 07       	cpc	r27, r17
+  3a:	d9 f7       	brne	.-10     	; 0x32 <__do_copy_data+0xc>
+
+0000003c <__do_clear_bss>:
+  3c:	20 e0       	ldi	r18, 0x00	; 0
+  3e:	a6 e7       	ldi	r26, 0x76	; 118
+  40:	b0 e0       	ldi	r27, 0x00	; 0
+  42:	01 c0       	rjmp	.+2      	; 0x46 <.do_clear_bss_start>
+
+00000044 <.do_clear_bss_loop>:
+  44:	1d 92       	st	X+, r1
+
+00000046 <.do_clear_bss_start>:
+  46:	aa 37       	cpi	r26, 0x7A	; 122
+  48:	b2 07       	cpc	r27, r18
+  4a:	e1 f7       	brne	.-8      	; 0x44 <.do_clear_bss_loop>
+  4c:	24 d0       	rcall	.+72     	; 0x96 <main>
+  4e:	9e c1       	rjmp	.+828    	; 0x38c <_exit>
+
+00000050 <__bad_interrupt>:
+  50:	d7 cf       	rjmp	.-82     	; 0x0 <__vectors>
+
+00000052 <initialise_74HC595>:
+#define HC595DataHigh() (shift_register_PORT |=  (1<<DS_pin)) //just some basic macros
+#define HC595DataLow()  (shift_register_PORT &= ~(1<<DS_pin))
+
+void initialise_74HC595()
+{
+   shift_register_DDR|=((1<<SHCP_pin)|(1<<STCP_pin)|(1<<DS_pin));	//sets all the pins to output
+  52:	87 b3       	in	r24, 0x17	; 23
+  54:	86 61       	ori	r24, 0x16	; 22
+  56:	87 bb       	out	0x17, r24	; 23
+  58:	08 95       	ret
+
+0000005a <pulse_shift_clock>:
+}
+
+
+void pulse_shift_clock()	//sends a serial pulse to the shift clock
+{
+   shift_register_PORT |=  (1<<SHCP_pin);
+  5a:	c2 9a       	sbi	0x18, 2	; 24
+
+   shift_register_PORT &= ~(1<<SHCP_pin);
+  5c:	c2 98       	cbi	0x18, 2	; 24
+  5e:	08 95       	ret
+
+00000060 <write_74HC595>:
+
+}
+
+void write_74HC595(uint8_t data)
+{
+  60:	cf 93       	push	r28
+  62:	df 93       	push	r29
+  64:	d8 2f       	mov	r29, r24
+    PORTB &= ~(1<<STCP_pin);	//set the "latch" low
+  66:	c4 98       	cbi	0x18, 4	; 24
+  68:	c8 e0       	ldi	r28, 0x08	; 8
+    
+    for(uint8_t i=0; i<8; i++)	//send the data serially
+    {
+        if(data & 0b10000000)   //Mask out the MSB bit of the data
+  6a:	dd 23       	and	r29, r29
+  6c:	14 f4       	brge	.+4      	; 0x72 <write_74HC595+0x12>
+		//if(data & 0b00000001)
+        {
+            HC595DataHigh();    //if the bit is high, set the data pin high
+  6e:	c1 9a       	sbi	0x18, 1	; 24
+  70:	01 c0       	rjmp	.+2      	; 0x74 <write_74HC595+0x14>
+        }
+      
+        else
+        {
+            HC595DataLow();     //if bit is low, set the data pin low
+  72:	c1 98       	cbi	0x18, 1	; 24
+        }
+
+        pulse_shift_clock();	//send a serial pulse
+  74:	f2 df       	rcall	.-28     	; 0x5a <pulse_shift_clock>
+        data = data<<1;			//shift the data and do it again
+  76:	dd 0f       	add	r29, r29
+  78:	c1 50       	subi	r28, 0x01	; 1
+
+void write_74HC595(uint8_t data)
+{
+    PORTB &= ~(1<<STCP_pin);	//set the "latch" low
+    
+    for(uint8_t i=0; i<8; i++)	//send the data serially
+  7a:	b9 f7       	brne	.-18     	; 0x6a <write_74HC595+0xa>
+        data = data<<1;			//shift the data and do it again
+		//data = data>>1;
+
+   }
+
+   PORTB |= (1<<STCP_pin);		//set the latch high to display the results
+  7c:	c4 9a       	sbi	0x18, 4	; 24
+}
+  7e:	df 91       	pop	r29
+  80:	cf 91       	pop	r28
+  82:	08 95       	ret
+
+00000084 <initialise_ADC>:
+ *		40.960		lightness changes don't obviously (or maybe is 33.792 equal to @165mv)
+ *		 0.799		voltage at maximum lightness
+ */
+void initialise_ADC(void)
+{
+	ADCSRA |= 1<<ADEN | 1<<ADIE | 1<<ADPS0 | 1<<ADPS2;
+  84:	86 b1       	in	r24, 0x06	; 6
+  86:	8d 68       	ori	r24, 0x8D	; 141
+  88:	86 b9       	out	0x06, r24	; 6
+	ADMUX  |= 1<<MUX1 | 1<<MUX0;						// PB3 as ADC pin
+  8a:	87 b1       	in	r24, 0x07	; 7
+  8c:	83 60       	ori	r24, 0x03	; 3
+  8e:	87 b9       	out	0x07, r24	; 7
+  90:	08 95       	ret
+
+00000092 <start_conversion>:
+}
+
+void start_conversion(void)
+{
+	ADCSRA |= 1<<ADSC;
+  92:	36 9a       	sbi	0x06, 6	; 6
+  94:	08 95       	ret
+
+00000096 <main>:
+}
+
+
+int main(void)
+{
+	sei();
+  96:	78 94       	sei
+	initialise_74HC595();
+  98:	dc df       	rcall	.-72     	; 0x52 <initialise_74HC595>
+	initialise_ADC();
+  9a:	f4 df       	rcall	.-24     	; 0x84 <initialise_ADC>
+	start_conversion();
+  9c:	fa df       	rcall	.-12     	; 0x92 <start_conversion>
+	
+	DDRB |= (1<<PB0);									// PWM control pin, as output
+  9e:	b8 9a       	sbi	0x17, 0	; 23
+	TCCR0A |= (1<<COM0A1) | (1<<WGM00) | (1<<WGM01);	// fast PWM mode + small settings
+  a0:	8a b5       	in	r24, 0x2a	; 42
+  a2:	83 68       	ori	r24, 0x83	; 131
+  a4:	8a bd       	out	0x2a, r24	; 42
+	
+	TIMSK |= (1<<TOIE0);								// Here some differences.
+  a6:	89 b7       	in	r24, 0x39	; 57
+  a8:	82 60       	ori	r24, 0x02	; 2
+  aa:	89 bf       	out	0x39, r24	; 57
+	
+	OCR0A = 125;										// should later be comment out to let interrupt handle this problem.
+  ac:	8d e7       	ldi	r24, 0x7D	; 125
+  ae:	89 bd       	out	0x29, r24	; 41
+	//OCR0A = 191;//75/100*255;
+	
+	TCCR0B |= (1<<CS00);								// no prescaler
+  b0:	83 b7       	in	r24, 0x33	; 51
+  b2:	81 60       	ori	r24, 0x01	; 1
+  b4:	83 bf       	out	0x33, r24	; 51
+		if(firstdigit > 7)
+			dutyCycle = (int)(255 * 1);
+		else if(firstdigit > 5)
+			dutyCycle = (int)(255 * 0.75);
+		else if(firstdigit > 3)
+			dutyCycle = (int)(255 * 0.55);
+  b6:	3c e8       	ldi	r19, 0x8C	; 140
+			dutyCycle = 127;							// 127.5 = 50%
+		*/
+		if(firstdigit > 7)
+			dutyCycle = (int)(255 * 1);
+		else if(firstdigit > 5)
+			dutyCycle = (int)(255 * 0.75);
+  b8:	2f eb       	ldi	r18, 0xBF	; 191
+		dutyCycle += 5;
+		if(dutyCycle > 255)
+			dutyCycle = 127;							// 127.5 = 50%
+		*/
+		if(firstdigit > 7)
+			dutyCycle = (int)(255 * 1);
+  ba:	9f ef       	ldi	r25, 0xFF	; 255
+		/*
+		dutyCycle += 5;
+		if(dutyCycle > 255)
+			dutyCycle = 127;							// 127.5 = 50%
+		*/
+		if(firstdigit > 7)
+  bc:	80 91 79 00 	lds	r24, 0x0079
+  c0:	88 30       	cpi	r24, 0x08	; 8
+  c2:	18 f0       	brcs	.+6      	; 0xca <main+0x34>
+			dutyCycle = (int)(255 * 1);
+  c4:	90 93 74 00 	sts	0x0074, r25
+  c8:	f9 cf       	rjmp	.-14     	; 0xbc <main+0x26>
+		else if(firstdigit > 5)
+  ca:	80 91 79 00 	lds	r24, 0x0079
+  ce:	86 30       	cpi	r24, 0x06	; 6
+  d0:	18 f0       	brcs	.+6      	; 0xd8 <main+0x42>
+			dutyCycle = (int)(255 * 0.75);
+  d2:	20 93 74 00 	sts	0x0074, r18
+  d6:	f2 cf       	rjmp	.-28     	; 0xbc <main+0x26>
+		else if(firstdigit > 3)
+  d8:	80 91 79 00 	lds	r24, 0x0079
+  dc:	84 30       	cpi	r24, 0x04	; 4
+  de:	18 f0       	brcs	.+6      	; 0xe6 <__stack+0x7>
+			dutyCycle = (int)(255 * 0.55);
+  e0:	30 93 74 00 	sts	0x0074, r19
+  e4:	eb cf       	rjmp	.-42     	; 0xbc <main+0x26>
+		else
+			dutyCycle = 0;
+  e6:	10 92 74 00 	sts	0x0074, r1
+  ea:	e8 cf       	rjmp	.-48     	; 0xbc <main+0x26>
+
+000000ec <__vector_8>:
+}
+
+
+
+ISR(ADC_vect)
+{
+  ec:	1f 92       	push	r1
+  ee:	0f 92       	push	r0
+  f0:	0f b6       	in	r0, 0x3f	; 63
+  f2:	0f 92       	push	r0
+  f4:	11 24       	eor	r1, r1
+  f6:	2f 93       	push	r18
+  f8:	3f 93       	push	r19
+  fa:	4f 93       	push	r20
+  fc:	5f 93       	push	r21
+  fe:	6f 93       	push	r22
+ 100:	7f 93       	push	r23
+ 102:	8f 93       	push	r24
+ 104:	9f 93       	push	r25
+ 106:	af 93       	push	r26
+ 108:	bf 93       	push	r27
+ 10a:	ef 93       	push	r30
+ 10c:	ff 93       	push	r31
+	voltage_reading = ADC;
+ 10e:	84 b1       	in	r24, 0x04	; 4
+ 110:	95 b1       	in	r25, 0x05	; 5
+ 112:	90 93 77 00 	sts	0x0077, r25
+ 116:	80 93 76 00 	sts	0x0076, r24
+	// voltage_reading 0 ~ 1023.
+	//firstdigit = ((voltage_reading * 5000L / 1023)+500) / 1000; //12V through voltage divider have a max. voltage 3.69V. equal to 755.71
+	// target: 
+	//		readingValue > 48		-	Display : 0
+	//		readingValue 48 - 0		-	Display : 0 - 9
+	if (voltage_reading > 45) // Try to tune it to the point really start to light up.
+ 11a:	80 91 76 00 	lds	r24, 0x0076
+ 11e:	90 91 77 00 	lds	r25, 0x0077
+ 122:	8e 97       	sbiw	r24, 0x2e	; 46
+ 124:	18 f0       	brcs	.+6      	; 0x12c <__vector_8+0x40>
+	{
+		firstdigit = 0;//voltage_reading; 
+ 126:	10 92 79 00 	sts	0x0079, r1
+ 12a:	a3 c0       	rjmp	.+326    	; 0x272 <__vector_8+0x186>
+		//write_74HC595(LED_patterns[firstdigit]);
+	}	
+	else if(voltage_reading < 4.8) 
+ 12c:	60 91 76 00 	lds	r22, 0x0076
+ 130:	70 91 77 00 	lds	r23, 0x0077
+ 134:	80 e0       	ldi	r24, 0x00	; 0
+ 136:	90 e0       	ldi	r25, 0x00	; 0
+ 138:	c8 d0       	rcall	.+400    	; 0x2ca <__floatunsisf>
+ 13a:	2a e9       	ldi	r18, 0x9A	; 154
+ 13c:	39 e9       	ldi	r19, 0x99	; 153
+ 13e:	49 e9       	ldi	r20, 0x99	; 153
+ 140:	50 e4       	ldi	r21, 0x40	; 64
+ 142:	bf d0       	rcall	.+382    	; 0x2c2 <__cmpsf2>
+ 144:	88 23       	and	r24, r24
+ 146:	24 f4       	brge	.+8      	; 0x150 <__vector_8+0x64>
+	{
+		firstdigit = 18; // This is a special '8' with dot, to show the max. performance of LEDs
+ 148:	82 e1       	ldi	r24, 0x12	; 18
+ 14a:	80 93 79 00 	sts	0x0079, r24
+ 14e:	91 c0       	rjmp	.+290    	; 0x272 <__vector_8+0x186>
+		//write_74HC595(LED_patterns[firstdigit]);
+	}
+	else if(voltage_reading < 9.6) // This block is really hard coded. Later find out the problem is caused by the contro PIN of LED driver board don't stable. Add a 4.7µF Cap the problem is all gone.
+ 150:	60 91 76 00 	lds	r22, 0x0076
+ 154:	70 91 77 00 	lds	r23, 0x0077
+ 158:	80 e0       	ldi	r24, 0x00	; 0
+ 15a:	90 e0       	ldi	r25, 0x00	; 0
+ 15c:	b6 d0       	rcall	.+364    	; 0x2ca <__floatunsisf>
+ 15e:	2a e9       	ldi	r18, 0x9A	; 154
+ 160:	39 e9       	ldi	r19, 0x99	; 153
+ 162:	49 e1       	ldi	r20, 0x19	; 25
+ 164:	51 e4       	ldi	r21, 0x41	; 65
+ 166:	ad d0       	rcall	.+346    	; 0x2c2 <__cmpsf2>
+ 168:	88 23       	and	r24, r24
+ 16a:	24 f4       	brge	.+8      	; 0x174 <__vector_8+0x88>
+		firstdigit = 9;
+ 16c:	89 e0       	ldi	r24, 0x09	; 9
+ 16e:	80 93 79 00 	sts	0x0079, r24
+ 172:	7f c0       	rjmp	.+254    	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 14.4)
+ 174:	60 91 76 00 	lds	r22, 0x0076
+ 178:	70 91 77 00 	lds	r23, 0x0077
+ 17c:	80 e0       	ldi	r24, 0x00	; 0
+ 17e:	90 e0       	ldi	r25, 0x00	; 0
+ 180:	a4 d0       	rcall	.+328    	; 0x2ca <__floatunsisf>
+ 182:	26 e6       	ldi	r18, 0x66	; 102
+ 184:	36 e6       	ldi	r19, 0x66	; 102
+ 186:	46 e6       	ldi	r20, 0x66	; 102
+ 188:	51 e4       	ldi	r21, 0x41	; 65
+ 18a:	9b d0       	rcall	.+310    	; 0x2c2 <__cmpsf2>
+ 18c:	88 23       	and	r24, r24
+ 18e:	24 f4       	brge	.+8      	; 0x198 <__vector_8+0xac>
+		firstdigit = 8;
+ 190:	88 e0       	ldi	r24, 0x08	; 8
+ 192:	80 93 79 00 	sts	0x0079, r24
+ 196:	6d c0       	rjmp	.+218    	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 19.2)
+ 198:	60 91 76 00 	lds	r22, 0x0076
+ 19c:	70 91 77 00 	lds	r23, 0x0077
+ 1a0:	80 e0       	ldi	r24, 0x00	; 0
+ 1a2:	90 e0       	ldi	r25, 0x00	; 0
+ 1a4:	92 d0       	rcall	.+292    	; 0x2ca <__floatunsisf>
+ 1a6:	2a e9       	ldi	r18, 0x9A	; 154
+ 1a8:	39 e9       	ldi	r19, 0x99	; 153
+ 1aa:	49 e9       	ldi	r20, 0x99	; 153
+ 1ac:	51 e4       	ldi	r21, 0x41	; 65
+ 1ae:	89 d0       	rcall	.+274    	; 0x2c2 <__cmpsf2>
+ 1b0:	88 23       	and	r24, r24
+ 1b2:	24 f4       	brge	.+8      	; 0x1bc <__vector_8+0xd0>
+		firstdigit = 7;
+ 1b4:	87 e0       	ldi	r24, 0x07	; 7
+ 1b6:	80 93 79 00 	sts	0x0079, r24
+ 1ba:	5b c0       	rjmp	.+182    	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 24)
+ 1bc:	80 91 76 00 	lds	r24, 0x0076
+ 1c0:	90 91 77 00 	lds	r25, 0x0077
+ 1c4:	48 97       	sbiw	r24, 0x18	; 24
+ 1c6:	20 f4       	brcc	.+8      	; 0x1d0 <__vector_8+0xe4>
+		firstdigit = 6;
+ 1c8:	86 e0       	ldi	r24, 0x06	; 6
+ 1ca:	80 93 79 00 	sts	0x0079, r24
+ 1ce:	51 c0       	rjmp	.+162    	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 28.8)
+ 1d0:	60 91 76 00 	lds	r22, 0x0076
+ 1d4:	70 91 77 00 	lds	r23, 0x0077
+ 1d8:	80 e0       	ldi	r24, 0x00	; 0
+ 1da:	90 e0       	ldi	r25, 0x00	; 0
+ 1dc:	76 d0       	rcall	.+236    	; 0x2ca <__floatunsisf>
+ 1de:	26 e6       	ldi	r18, 0x66	; 102
+ 1e0:	36 e6       	ldi	r19, 0x66	; 102
+ 1e2:	46 ee       	ldi	r20, 0xE6	; 230
+ 1e4:	51 e4       	ldi	r21, 0x41	; 65
+ 1e6:	6d d0       	rcall	.+218    	; 0x2c2 <__cmpsf2>
+ 1e8:	88 23       	and	r24, r24
+ 1ea:	24 f4       	brge	.+8      	; 0x1f4 <__vector_8+0x108>
+		firstdigit = 5;
+ 1ec:	85 e0       	ldi	r24, 0x05	; 5
+ 1ee:	80 93 79 00 	sts	0x0079, r24
+ 1f2:	3f c0       	rjmp	.+126    	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 33.6)
+ 1f4:	60 91 76 00 	lds	r22, 0x0076
+ 1f8:	70 91 77 00 	lds	r23, 0x0077
+ 1fc:	80 e0       	ldi	r24, 0x00	; 0
+ 1fe:	90 e0       	ldi	r25, 0x00	; 0
+ 200:	64 d0       	rcall	.+200    	; 0x2ca <__floatunsisf>
+ 202:	26 e6       	ldi	r18, 0x66	; 102
+ 204:	36 e6       	ldi	r19, 0x66	; 102
+ 206:	46 e0       	ldi	r20, 0x06	; 6
+ 208:	52 e4       	ldi	r21, 0x42	; 66
+ 20a:	5b d0       	rcall	.+182    	; 0x2c2 <__cmpsf2>
+ 20c:	88 23       	and	r24, r24
+ 20e:	24 f4       	brge	.+8      	; 0x218 <__vector_8+0x12c>
+		firstdigit = 4;
+ 210:	84 e0       	ldi	r24, 0x04	; 4
+ 212:	80 93 79 00 	sts	0x0079, r24
+ 216:	2d c0       	rjmp	.+90     	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 38.4)
+ 218:	60 91 76 00 	lds	r22, 0x0076
+ 21c:	70 91 77 00 	lds	r23, 0x0077
+ 220:	80 e0       	ldi	r24, 0x00	; 0
+ 222:	90 e0       	ldi	r25, 0x00	; 0
+ 224:	52 d0       	rcall	.+164    	; 0x2ca <__floatunsisf>
+ 226:	2a e9       	ldi	r18, 0x9A	; 154
+ 228:	39 e9       	ldi	r19, 0x99	; 153
+ 22a:	49 e1       	ldi	r20, 0x19	; 25
+ 22c:	52 e4       	ldi	r21, 0x42	; 66
+ 22e:	49 d0       	rcall	.+146    	; 0x2c2 <__cmpsf2>
+ 230:	88 23       	and	r24, r24
+ 232:	24 f4       	brge	.+8      	; 0x23c <__vector_8+0x150>
+		firstdigit = 3;
+ 234:	83 e0       	ldi	r24, 0x03	; 3
+ 236:	80 93 79 00 	sts	0x0079, r24
+ 23a:	1b c0       	rjmp	.+54     	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading < 43.2)
+ 23c:	60 91 76 00 	lds	r22, 0x0076
+ 240:	70 91 77 00 	lds	r23, 0x0077
+ 244:	80 e0       	ldi	r24, 0x00	; 0
+ 246:	90 e0       	ldi	r25, 0x00	; 0
+ 248:	40 d0       	rcall	.+128    	; 0x2ca <__floatunsisf>
+ 24a:	2d ec       	ldi	r18, 0xCD	; 205
+ 24c:	3c ec       	ldi	r19, 0xCC	; 204
+ 24e:	4c e2       	ldi	r20, 0x2C	; 44
+ 250:	52 e4       	ldi	r21, 0x42	; 66
+ 252:	37 d0       	rcall	.+110    	; 0x2c2 <__cmpsf2>
+ 254:	88 23       	and	r24, r24
+ 256:	24 f4       	brge	.+8      	; 0x260 <__vector_8+0x174>
+		firstdigit = 2;
+ 258:	82 e0       	ldi	r24, 0x02	; 2
+ 25a:	80 93 79 00 	sts	0x0079, r24
+ 25e:	09 c0       	rjmp	.+18     	; 0x272 <__vector_8+0x186>
+	else if(voltage_reading <= 45)
+ 260:	80 91 76 00 	lds	r24, 0x0076
+ 264:	90 91 77 00 	lds	r25, 0x0077
+ 268:	8e 97       	sbiw	r24, 0x2e	; 46
+ 26a:	18 f4       	brcc	.+6      	; 0x272 <__vector_8+0x186>
+		firstdigit = 1;
+ 26c:	81 e0       	ldi	r24, 0x01	; 1
+ 26e:	80 93 79 00 	sts	0x0079, r24
+		
+	write_74HC595(LED_patterns[firstdigit]);
+ 272:	e0 91 79 00 	lds	r30, 0x0079
+ 276:	f0 e0       	ldi	r31, 0x00	; 0
+ 278:	e0 5a       	subi	r30, 0xA0	; 160
+ 27a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 27c:	80 81       	ld	r24, Z
+ 27e:	f0 de       	rcall	.-544    	; 0x60 <write_74HC595>
+	
+		//firstdigit = (int) map(voltage_reading, 48,0, 0, 9);
+	
+	//write_74HC595(LED_patterns[firstdigit]);
+	// TODO :   Add a variable to send back to main loop, in order to drive FAN with the Speed it should using.
+	ADCSRA |= 1<<ADSC;
+ 280:	36 9a       	sbi	0x06, 6	; 6
+}
+ 282:	ff 91       	pop	r31
+ 284:	ef 91       	pop	r30
+ 286:	bf 91       	pop	r27
+ 288:	af 91       	pop	r26
+ 28a:	9f 91       	pop	r25
+ 28c:	8f 91       	pop	r24
+ 28e:	7f 91       	pop	r23
+ 290:	6f 91       	pop	r22
+ 292:	5f 91       	pop	r21
+ 294:	4f 91       	pop	r20
+ 296:	3f 91       	pop	r19
+ 298:	2f 91       	pop	r18
+ 29a:	0f 90       	pop	r0
+ 29c:	0f be       	out	0x3f, r0	; 63
+ 29e:	0f 90       	pop	r0
+ 2a0:	1f 90       	pop	r1
+ 2a2:	18 95       	reti
+
+000002a4 <__vector_5>:
+
+ISR(TIMER0_OVF_vect)
+{
+ 2a4:	1f 92       	push	r1
+ 2a6:	0f 92       	push	r0
+ 2a8:	0f b6       	in	r0, 0x3f	; 63
+ 2aa:	0f 92       	push	r0
+ 2ac:	11 24       	eor	r1, r1
+ 2ae:	8f 93       	push	r24
+	OCR0A = dutyCycle;
+ 2b0:	80 91 74 00 	lds	r24, 0x0074
+ 2b4:	89 bd       	out	0x29, r24	; 41
+ 2b6:	8f 91       	pop	r24
+ 2b8:	0f 90       	pop	r0
+ 2ba:	0f be       	out	0x3f, r0	; 63
+ 2bc:	0f 90       	pop	r0
+ 2be:	1f 90       	pop	r1
+ 2c0:	18 95       	reti
+
+000002c2 <__cmpsf2>:
+ 2c2:	40 d0       	rcall	.+128    	; 0x344 <__fp_cmp>
+ 2c4:	08 f4       	brcc	.+2      	; 0x2c8 <__cmpsf2+0x6>
+ 2c6:	81 e0       	ldi	r24, 0x01	; 1
+ 2c8:	08 95       	ret
+
+000002ca <__floatunsisf>:
+ 2ca:	e8 94       	clt
+ 2cc:	09 c0       	rjmp	.+18     	; 0x2e0 <__floatsisf+0x12>
+
+000002ce <__floatsisf>:
+ 2ce:	97 fb       	bst	r25, 7
+ 2d0:	3e f4       	brtc	.+14     	; 0x2e0 <__floatsisf+0x12>
+ 2d2:	90 95       	com	r25
+ 2d4:	80 95       	com	r24
+ 2d6:	70 95       	com	r23
+ 2d8:	61 95       	neg	r22
+ 2da:	7f 4f       	sbci	r23, 0xFF	; 255
+ 2dc:	8f 4f       	sbci	r24, 0xFF	; 255
+ 2de:	9f 4f       	sbci	r25, 0xFF	; 255
+ 2e0:	99 23       	and	r25, r25
+ 2e2:	a9 f0       	breq	.+42     	; 0x30e <__floatsisf+0x40>
+ 2e4:	f9 2f       	mov	r31, r25
+ 2e6:	96 e9       	ldi	r25, 0x96	; 150
+ 2e8:	bb 27       	eor	r27, r27
+ 2ea:	93 95       	inc	r25
+ 2ec:	f6 95       	lsr	r31
+ 2ee:	87 95       	ror	r24
+ 2f0:	77 95       	ror	r23
+ 2f2:	67 95       	ror	r22
+ 2f4:	b7 95       	ror	r27
+ 2f6:	f1 11       	cpse	r31, r1
+ 2f8:	f8 cf       	rjmp	.-16     	; 0x2ea <__floatsisf+0x1c>
+ 2fa:	fa f4       	brpl	.+62     	; 0x33a <__floatsisf+0x6c>
+ 2fc:	bb 0f       	add	r27, r27
+ 2fe:	11 f4       	brne	.+4      	; 0x304 <__floatsisf+0x36>
+ 300:	60 ff       	sbrs	r22, 0
+ 302:	1b c0       	rjmp	.+54     	; 0x33a <__floatsisf+0x6c>
+ 304:	6f 5f       	subi	r22, 0xFF	; 255
+ 306:	7f 4f       	sbci	r23, 0xFF	; 255
+ 308:	8f 4f       	sbci	r24, 0xFF	; 255
+ 30a:	9f 4f       	sbci	r25, 0xFF	; 255
+ 30c:	16 c0       	rjmp	.+44     	; 0x33a <__floatsisf+0x6c>
+ 30e:	88 23       	and	r24, r24
+ 310:	11 f0       	breq	.+4      	; 0x316 <__floatsisf+0x48>
+ 312:	96 e9       	ldi	r25, 0x96	; 150
+ 314:	11 c0       	rjmp	.+34     	; 0x338 <__floatsisf+0x6a>
+ 316:	77 23       	and	r23, r23
+ 318:	21 f0       	breq	.+8      	; 0x322 <__floatsisf+0x54>
+ 31a:	9e e8       	ldi	r25, 0x8E	; 142
+ 31c:	87 2f       	mov	r24, r23
+ 31e:	76 2f       	mov	r23, r22
+ 320:	05 c0       	rjmp	.+10     	; 0x32c <__floatsisf+0x5e>
+ 322:	66 23       	and	r22, r22
+ 324:	71 f0       	breq	.+28     	; 0x342 <__floatsisf+0x74>
+ 326:	96 e8       	ldi	r25, 0x86	; 134
+ 328:	86 2f       	mov	r24, r22
+ 32a:	70 e0       	ldi	r23, 0x00	; 0
+ 32c:	60 e0       	ldi	r22, 0x00	; 0
+ 32e:	2a f0       	brmi	.+10     	; 0x33a <__floatsisf+0x6c>
+ 330:	9a 95       	dec	r25
+ 332:	66 0f       	add	r22, r22
+ 334:	77 1f       	adc	r23, r23
+ 336:	88 1f       	adc	r24, r24
+ 338:	da f7       	brpl	.-10     	; 0x330 <__floatsisf+0x62>
+ 33a:	88 0f       	add	r24, r24
+ 33c:	96 95       	lsr	r25
+ 33e:	87 95       	ror	r24
+ 340:	97 f9       	bld	r25, 7
+ 342:	08 95       	ret
+
+00000344 <__fp_cmp>:
+ 344:	99 0f       	add	r25, r25
+ 346:	00 08       	sbc	r0, r0
+ 348:	55 0f       	add	r21, r21
+ 34a:	aa 0b       	sbc	r26, r26
+ 34c:	e0 e8       	ldi	r30, 0x80	; 128
+ 34e:	fe ef       	ldi	r31, 0xFE	; 254
+ 350:	16 16       	cp	r1, r22
+ 352:	17 06       	cpc	r1, r23
+ 354:	e8 07       	cpc	r30, r24
+ 356:	f9 07       	cpc	r31, r25
+ 358:	c0 f0       	brcs	.+48     	; 0x38a <__fp_cmp+0x46>
+ 35a:	12 16       	cp	r1, r18
+ 35c:	13 06       	cpc	r1, r19
+ 35e:	e4 07       	cpc	r30, r20
+ 360:	f5 07       	cpc	r31, r21
+ 362:	98 f0       	brcs	.+38     	; 0x38a <__fp_cmp+0x46>
+ 364:	62 1b       	sub	r22, r18
+ 366:	73 0b       	sbc	r23, r19
+ 368:	84 0b       	sbc	r24, r20
+ 36a:	95 0b       	sbc	r25, r21
+ 36c:	39 f4       	brne	.+14     	; 0x37c <__fp_cmp+0x38>
+ 36e:	0a 26       	eor	r0, r26
+ 370:	61 f0       	breq	.+24     	; 0x38a <__fp_cmp+0x46>
+ 372:	23 2b       	or	r18, r19
+ 374:	24 2b       	or	r18, r20
+ 376:	25 2b       	or	r18, r21
+ 378:	21 f4       	brne	.+8      	; 0x382 <__fp_cmp+0x3e>
+ 37a:	08 95       	ret
+ 37c:	0a 26       	eor	r0, r26
+ 37e:	09 f4       	brne	.+2      	; 0x382 <__fp_cmp+0x3e>
+ 380:	a1 40       	sbci	r26, 0x01	; 1
+ 382:	a6 95       	lsr	r26
+ 384:	8f ef       	ldi	r24, 0xFF	; 255
+ 386:	81 1d       	adc	r24, r1
+ 388:	81 1d       	adc	r24, r1
+ 38a:	08 95       	ret
+
+0000038c <_exit>:
+ 38c:	f8 94       	cli
+
+0000038e <__stop_program>:
+ 38e:	ff cf       	rjmp	.-2      	; 0x38e <__stop_program>
