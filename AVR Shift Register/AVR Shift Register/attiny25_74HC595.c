@@ -83,11 +83,11 @@ void start_conversion(void)
 int main(void)
 {
 	sei();
-	initialise_74HC595();
+	//initialise_74HC595();
 	initialise_ADC();
 	start_conversion();
 	
-	DDRB |= (1<<PB0);									// PWM control pin, as output
+	DDRB |= (1<<PB0) | (1<<PB1);						// PWM control pin, as output
 	TCCR0A |= (1<<COM0A1) | (1<<WGM00) | (1<<WGM01);	// fast PWM mode + small settings
 	
 	TIMSK |= (1<<TOIE0);								// Here some differences.
@@ -108,6 +108,7 @@ int main(void)
 		if(dutyCycle > 255)
 			dutyCycle = 127;							// 127.5 = 50%
 		*/
+		/*
 		if(firstdigit > 7)
 			dutyCycle = (int)(255 * 1);
 		else if(firstdigit > 5)
@@ -116,6 +117,7 @@ int main(void)
 			dutyCycle = (int)(255 * 0.55);
 		else
 			dutyCycle = 0;
+		*/
 	}
 }
 
@@ -124,6 +126,8 @@ int main(void)
 ISR(ADC_vect)
 {
 	voltage_reading = ADC;
+	
+	/*
 	//firstdigit = ((voltage_reading * 5000L / 1023)+500) / 1000;
 	// voltage_reading 0 ~ 1023.
 	//firstdigit = ((voltage_reading * 5000L / 1023)+500) / 1000; //12V through voltage divider have a max. voltage 3.69V. equal to 755.71
@@ -159,8 +163,8 @@ ISR(ADC_vect)
 	else if(voltage_reading <= 45)
 		firstdigit = 1;
 		
-	write_74HC595(LED_patterns[firstdigit]);
-	
+	//write_74HC595(LED_patterns[firstdigit]);
+	*/
 	
 	/*
 	
@@ -185,10 +189,14 @@ ISR(ADC_vect)
 	
 	//write_74HC595(LED_patterns[firstdigit]);
 	// TODO :   Add a variable to send back to main loop, in order to drive FAN with the Speed it should using.
+	
+	
+	dutyCycle = voltage_reading / 4; // voltage_reading: 0 ~ 1023, dutyCycle: 0 ~ 255
 	ADCSRA |= 1<<ADSC;
 }
 
 ISR(TIMER0_OVF_vect)
 {
 	OCR0A = dutyCycle;
+	OCR0B = dutyCycle;
 }

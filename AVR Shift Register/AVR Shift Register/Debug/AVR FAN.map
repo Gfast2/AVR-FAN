@@ -1,11 +1,5 @@
 Archive member included because of file (symbol)
 
-c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(cmpsf2.o)
-                              attiny25_74HC595.o (__ltsf2)
-c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(floatsisf.o)
-                              attiny25_74HC595.o (__floatunsisf)
-c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(fp_cmp.o)
-                              c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(cmpsf2.o) (__fp_cmp)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn25.o (exit)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_copy_data.o)
@@ -27,15 +21,14 @@ Discarded input sections
  .text          0x00000000        0x0 attiny25_74HC595.o
  .data          0x00000000        0x0 attiny25_74HC595.o
  .bss           0x00000000        0x0 attiny25_74HC595.o
- .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(cmpsf2.o)
- .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(cmpsf2.o)
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(cmpsf2.o)
- .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(floatsisf.o)
- .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(floatsisf.o)
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(floatsisf.o)
- .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(fp_cmp.o)
- .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(fp_cmp.o)
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(fp_cmp.o)
+ .text.initialise_74HC595
+                0x00000000        0x8 attiny25_74HC595.o
+ .text.pulse_shift_clock
+                0x00000000        0x6 attiny25_74HC595.o
+ .text.write_74HC595
+                0x00000000       0x24 attiny25_74HC595.o
+ .data.LED_patterns
+                0x00000000       0x14 attiny25_74HC595.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
@@ -200,7 +193,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x390
+.text           0x00000000       0xea
  *(.vectors)
  .vectors       0x00000000       0x1e c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn25.o
                 0x00000000                __vector_default
@@ -272,48 +265,25 @@ END GROUP
                 0x00000050                __vector_10
                 0x00000052                . = ALIGN (0x2)
  *(.text.*)
- .text.initialise_74HC595
-                0x00000052        0x8 attiny25_74HC595.o
-                0x00000052                initialise_74HC595
- .text.pulse_shift_clock
-                0x0000005a        0x6 attiny25_74HC595.o
-                0x0000005a                pulse_shift_clock
- .text.write_74HC595
-                0x00000060       0x24 attiny25_74HC595.o
-                0x00000060                write_74HC595
  .text.initialise_ADC
-                0x00000084        0xe attiny25_74HC595.o
-                0x00000084                initialise_ADC
+                0x00000052        0xa attiny25_74HC595.o
+                0x00000052                initialise_ADC
  .text.start_conversion
-                0x00000092        0x4 attiny25_74HC595.o
-                0x00000092                start_conversion
- .text.main     0x00000096       0x56 attiny25_74HC595.o
-                0x00000096                main
+                0x0000005c        0x4 attiny25_74HC595.o
+                0x0000005c                start_conversion
+ .text.main     0x00000060       0x24 attiny25_74HC595.o
+                0x00000060                main
  .text.__vector_8
-                0x000000ec      0x1b8 attiny25_74HC595.o
-                0x000000ec                __vector_8
+                0x00000084       0x3e attiny25_74HC595.o
+                0x00000084                __vector_8
  .text.__vector_5
-                0x000002a4       0x1e attiny25_74HC595.o
-                0x000002a4                __vector_5
- .text.avr-libc.fplib
-                0x000002c2        0x8 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(cmpsf2.o)
-                0x000002c2                __nesf2
-                0x000002c2                __eqsf2
-                0x000002c2                __cmpsf2
-                0x000002c2                __ltsf2
-                0x000002c2                __lesf2
- .text.avr-libc.fplib
-                0x000002ca       0x7a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(floatsisf.o)
-                0x000002ca                __floatunsisf
-                0x000002ce                __floatsisf
- .text.avr-libc.fplib
-                0x00000344       0x48 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a(fp_cmp.o)
-                0x00000344                __fp_cmp
-                0x0000038c                . = ALIGN (0x2)
+                0x000000c2       0x24 attiny25_74HC595.o
+                0x000000c2                __vector_5
+                0x000000e6                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000038c        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
-                0x0000038c                _exit
-                0x0000038c                exit
+ .fini9         0x000000e6        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
+                0x000000e6                _exit
+                0x000000e6                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -332,47 +302,44 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000038c        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
+ .fini0         0x000000e6        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1061/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000390                _etext = .
+                0x000000ea                _etext = .
 
-.data           0x00800060       0x16 load address 0x00000390
+.data           0x00800060        0x2 load address 0x000000ea
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
- .data.LED_patterns
-                0x00800060       0x14 attiny25_74HC595.o
-                0x00800060                LED_patterns
  .data.dutyCycle
-                0x00800074        0x1 attiny25_74HC595.o
-                0x00800074                dutyCycle
+                0x00800060        0x1 attiny25_74HC595.o
+                0x00800060                dutyCycle
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800076                . = ALIGN (0x2)
- *fill*         0x00800075        0x1 
-                0x00800076                _edata = .
-                0x00800076                PROVIDE (__data_end, .)
+                0x00800062                . = ALIGN (0x2)
+ *fill*         0x00800061        0x1 
+                0x00800062                _edata = .
+                0x00800062                PROVIDE (__data_end, .)
 
-.bss            0x00800076        0x4
-                0x00800076                PROVIDE (__bss_start, .)
+.bss            0x00800062        0x4
+                0x00800062                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800076        0x4 attiny25_74HC595.o
-                0x00800076                voltage_reading
-                0x00800078                pwmFAN
-                0x00800079                firstdigit
-                0x0080007a                PROVIDE (__bss_end, .)
-                0x00000390                __data_load_start = LOADADDR (.data)
-                0x000003a6                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800062        0x4 attiny25_74HC595.o
+                0x00800062                voltage_reading
+                0x00800064                pwmFAN
+                0x00800065                firstdigit
+                0x00800066                PROVIDE (__bss_end, .)
+                0x000000ea                __data_load_start = LOADADDR (.data)
+                0x000000ec                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080007a        0x0
-                0x0080007a                PROVIDE (__noinit_start, .)
+.noinit         0x00800066        0x0
+                0x00800066                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0080007a                PROVIDE (__noinit_end, .)
-                0x0080007a                _end = .
-                0x0080007a                PROVIDE (__heap_start, .)
+                0x00800066                PROVIDE (__noinit_end, .)
+                0x00800066                _end = .
+                0x00800066                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -439,30 +406,30 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x207
+.debug_info     0x00000000      0x1f0
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000      0x207 attiny25_74HC595.o
+ .debug_info    0x00000000      0x1f0 attiny25_74HC595.o
 
-.debug_abbrev   0x00000000      0x12b
+.debug_abbrev   0x00000000      0x111
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x12b attiny25_74HC595.o
+ .debug_abbrev  0x00000000      0x111 attiny25_74HC595.o
 
-.debug_line     0x00000000      0x188
+.debug_line     0x00000000      0x168
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000      0x188 attiny25_74HC595.o
+ .debug_line    0x00000000      0x168 attiny25_74HC595.o
 
-.debug_frame    0x00000000       0xf8
+.debug_frame    0x00000000       0xc4
  *(.debug_frame)
- .debug_frame   0x00000000       0xf8 attiny25_74HC595.o
+ .debug_frame   0x00000000       0xc4 attiny25_74HC595.o
 
 .debug_str      0x00000000      0x1f7
  *(.debug_str)
  .debug_str     0x00000000      0x1f7 attiny25_74HC595.o
                                 0x22b (size before relaxing)
 
-.debug_loc      0x00000000      0x195
+.debug_loc      0x00000000      0x113
  *(.debug_loc)
- .debug_loc     0x00000000      0x195 attiny25_74HC595.o
+ .debug_loc     0x00000000      0x113 attiny25_74HC595.o
 
 .debug_macinfo
  *(.debug_macinfo)
