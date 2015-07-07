@@ -1,4 +1,3 @@
-Small & Quick AVR Project.
+Small & Quick AVR Project
 
-I'm using a ATTiny25 on my Desklamp that I designed by myself. ATTiny25 is driving a FAN, reading a Poti and a 7-Segement-Display.
-It read the value from Poti to setting the speed of the FAN and the brightness of the LEDs and show the speed on 7-Segement-Display.
+I use a Attiny25 drive two 12cm computer cooling FAN as desktop FAN on my work bench.
